@@ -15,15 +15,31 @@ func main() {
 	port := "8080"
 	// step 1: create a server
 	// step 2: show link and qr code
-	// step 3: get("/") here we will fetch all the files and dir of server computer 
+	// step 3: get("/") here we will fetch all the files and dir of server computer
 	// step 4: if clicked on file then it will download the file
 
 	ShowQRCode(port)
 
 	router.GET("/", getHomepage)
+	router.POST("/api/download", downloadFile)
 	router.Run("localhost:" + port)
 }
 
+func downloadFile(ctx *gin.Context) {
+	currWorkingDir, err := os.Getwd()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to get current working directory"})
+		return
+	}
+
+	fileName := ctx.Request.URL.Query().Get("filename")
+	if fileName == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Filename not provided"})
+		return
+	}
+
+	ctx.FileAttachment(currWorkingDir+"/"+fileName, fileName)
+}
 
 func getHomepage(ctx *gin.Context) {
 	sysFiles := getFiles()
@@ -48,7 +64,7 @@ func getFiles() []os.DirEntry {
 func ShowQRCode(port string) {
 	ip := GetLocalIP()
 	hostIp := "http://" + ip + ":" + port
-	fmt.Println("Enter " + hostIp +" in your browser" + "\nor\n" + "Scan this QR code on your phone")
+	fmt.Println("Enter " + hostIp + " in your browser" + "\nor\n" + "Scan this QR code on your phone")
 
 	config := qrterminal.Config{
 		Level:     qrterminal.M,
