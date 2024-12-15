@@ -9,6 +9,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/mdp/qrterminal/v3"
+	"strconv"
 )
 
 func main() {
@@ -23,41 +24,57 @@ func main() {
 
 	router.Use(cors.Default())
 	router.GET("/", getHomepage)
-	router.POST("/api/download", downloadFile)
+	router.POST("/api/download/:id", downloadFile)
 	router.Run("localhost:" + port)
 }
 
 func downloadFile(ctx *gin.Context) {
 	currWorkingDir, err := os.Getwd()
+	id := ctx.Param("id")
+	idInt, err := strconv.Atoi(id)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to get current working directory"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid file ID"})
+		return
+	}	 
+	
+	files := getFiles()
+	if idInt < 0 || idInt >= len(files) {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
+		return
+	}
+	
+	var fileName string = files[idInt]
+	var filePath string = currWorkingDir + "/" + fileName
+	
+	// Ensure the file exists before sending
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
 		return
 	}
 
-	fileName := ctx.Request.URL.Query().Get("filename")
-	if fileName == "" {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Filename not provided"})
-		return
-	}
-
-	ctx.FileAttachment(currWorkingDir+"/"+fileName, fileName)
+	ctx.FileAttachment(filePath , fileName)
 }
 
 func getHomepage(ctx *gin.Context) {
 	sysFiles := getFiles()
-	var fileNames []string
-	for _, file := range sysFiles {
-		fileNames = append(fileNames, file.Name())
-	}
-	ctx.JSON(http.StatusOK, fileNames)
+	// var fileNames []string
+	// for _, file := range sysFiles {
+	// 	fileNames = append(fileNames, file.Name())
+	// }
+	ctx.JSON(http.StatusOK, sysFiles)
 }
 
-func getFiles() []os.DirEntry {
+func getFiles() []string {
 	items, err := os.ReadDir("./")
 	if err != nil {
 		fmt.Println(err)
 	}
-	return items
+	var fileNames []string
+	for _, file := range items {
+		fileNames = append(fileNames, file.Name())
+	}
+	
+	return fileNames
 }
 
 /*
