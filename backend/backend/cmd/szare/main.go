@@ -29,15 +29,7 @@ func GetLocalIP() string {
 	return ""
 }
 
-func main() {
-	router := gin.Default()
-	port := "8080"
-	// step 1: create a server
-	// step 2: show link and qr code
-	// step 3: get("/") here we will fetch all the files and dir of server computer and let us download it
-
-	// gin.SetMode(gin.ReleaseMode)
-
+func ShowQRCode(port string){
 	ip := GetLocalIP()
 	hostIp := "http://" + ip + ":" + port
 	fmt.Println(`Server running on ` + hostIp)
@@ -50,6 +42,18 @@ func main() {
 		QuietZone: 1,
 	}
 	qrterminal.GenerateWithConfig(hostIp, config)
+}
+
+func main() {
+	router := gin.Default()
+	port := "8080"
+	// step 1: create a server
+	// step 2: show link and qr code
+	// step 3: get("/") here we will fetch all the files and dir of server computer and let us download it
+
+	// gin.SetMode(gin.ReleaseMode)
+
+	ShowQRCode(port);
 	
 	router.Run("localhost:" + port)
 }
