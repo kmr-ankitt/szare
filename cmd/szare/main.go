@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/mdp/qrterminal/v3"
 )
@@ -20,6 +21,7 @@ func main() {
 
 	ShowQRCode(port)
 
+	router.Use(cors.Default())
 	router.GET("/", getHomepage)
 	router.POST("/api/download", downloadFile)
 	router.Run("localhost:" + port)
