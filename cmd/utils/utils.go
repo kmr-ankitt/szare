@@ -25,6 +25,12 @@ func GetAllFilesAndFolder() ([]string, []string) {
 	return fileNames , folderNames
 }
 
+func ExpandDirectory(folderName string) ([]string, []string) {
+	err := os.Chdir(folderName)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return GetAllFilesAndFolder()
 }
 
 /*

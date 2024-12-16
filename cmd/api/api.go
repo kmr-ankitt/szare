@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 	"os"
-	"strconv"
+	"path/filepath"
 	"szare/cmd/utils"
 
 	"github.com/gin-gonic/gin"
@@ -11,28 +11,31 @@ import (
 
 func DownloadFile(ctx *gin.Context) {
 	currWorkingDir, err := os.Getwd()
-	id := ctx.Param("id")
-	idInt, err := strconv.Atoi(id)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid file ID"})
-		return
-	}	 
-	
-	files := utils.GetFiles()
-	if idInt < 0 || idInt >= len(files) {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 		return
 	}
 	
-	var fileName string = files[idInt]
-	var filePath string = currWorkingDir + "/" + fileName
+	fileName := ctx.Query("name")
+	if fileName == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "File name is required"})
+		return
+	}
+	
+	// var fileName string = files[idInt]
+	filePath := filepath.Join(currWorkingDir, fileName)
+	
+	
+	if fileInfo, err := os.Stat(filePath); err == nil && fileInfo.IsDir() {
+		utils.ExpandDirectory(fileName)
+		return
+	}	
 	
 	// Ensure the file exists before sending
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
 		return
 	}
-
 	ctx.FileAttachment(filePath , fileName)
 }
 

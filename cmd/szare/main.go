@@ -16,6 +16,6 @@ func main() {
 
 	router.Use(cors.Default())
 	router.GET("/", api.GetHomepage)
-	router.POST("/api/download/:id", api.DownloadFile)
+	router.POST("/api/download/", api.DownloadFile)
 	router.Run(":8000")
 }
