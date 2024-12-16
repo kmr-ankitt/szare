@@ -8,19 +8,23 @@ import (
 	"github.com/mdp/qrterminal/v3"
 )
 
-func GetFiles() []string {
+func GetAllFilesAndFolder() ([]string, []string) {
 	items, err := os.ReadDir("./")
 	if err != nil {
 		fmt.Println(err)
 	}
 	var fileNames []string
+	var folderNames []string = []string{".."}
 	for _, file := range items {
 		if !file.IsDir() {
 			fileNames = append(fileNames, file.Name())
+		} else {
+			folderNames = append(folderNames, file.Name())
 		}
 	}
+	return fileNames , folderNames
+}
 
-	return fileNames
 }
 
 /*

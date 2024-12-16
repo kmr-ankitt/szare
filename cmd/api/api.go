@@ -37,6 +37,6 @@ func DownloadFile(ctx *gin.Context) {
 }
 
 func GetHomepage(ctx *gin.Context) {
-	sysFiles := utils.GetFiles()
-	ctx.JSON(http.StatusOK, sysFiles)
+	sysFile, sysFolder := utils.GetAllFilesAndFolder()
+	ctx.JSON(http.StatusOK, gin.H{"files": sysFile, "folders": sysFolder})
 }
