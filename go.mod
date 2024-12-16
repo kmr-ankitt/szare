@@ -1,4 +1,4 @@
-module szare-backend
+module szare
 
 go 1.23.4
 

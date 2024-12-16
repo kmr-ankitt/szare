@@ -15,9 +15,11 @@ func GetFiles() []string {
 	}
 	var fileNames []string
 	for _, file := range items {
-		fileNames = append(fileNames, file.Name())
+		if !file.IsDir() {
+			fileNames = append(fileNames, file.Name())
+		}
 	}
-	
+
 	return fileNames
 }
 
