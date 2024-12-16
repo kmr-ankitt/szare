@@ -8,7 +8,7 @@ export default function Directories() {
     folders: [],
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const filesPerPage = 12;
+  const filesPerPage = 9;
   const [ip, setIp] = useState<string>("");
 
   const fetchFiles = () =>{
@@ -76,7 +76,7 @@ export default function Directories() {
             className="col-span-4 flex items-center gap-2 cursor-pointer"
             onClick={() => downloadFile(name)}
           >
-            {index > file.folders.length - 1 ? (
+            {!file.folders.includes(name) ? (
               <Image
                 src="file.svg"
                 className="mb-[.3rem]"
@@ -95,7 +95,7 @@ export default function Directories() {
             )}
             {name}
           </div>
-          {index >= file.folders.length && (
+          {!file.folders.includes(name) && (
             <div className="col-span-1">
               <button onClick={() => downloadFile(filesPlusFolders[index])}>
                 <Image
@@ -103,14 +103,14 @@ export default function Directories() {
                   className="mt-[.2rem]"
                   height={25}
                   width={25}
-                  alt="folder-icon"
+                  alt="download-icon"
                 />
               </button>
             </div>
           )}
         </div>
       ))}
-      {filesPlusFolders.length > filesPerPage && (
+       {filesPlusFolders.length > filesPerPage && (
         <div className="flex justify-center mt-4 text-darkblue font-bold">
           {Array.from(
             { length: Math.ceil(filesPlusFolders.length / filesPerPage) },
