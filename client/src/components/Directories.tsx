@@ -5,11 +5,14 @@ export default function Directories() {
   const [files, setFiles] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const filesPerPage = 12;
-
-  const ip = document.location.hostname;
+  const [ip, setIp] = useState<string>("");
 
   useEffect(() => {
-    fetch(`http://${ip}:8000`)
+    // Access the document object inside useEffect to ensure it runs on the client side
+    const hostname = document.location.hostname;
+    setIp(hostname);
+
+    fetch(`http://${hostname}:8000`)
       .then((res) => res.json())
       .then((data) => {
         setFiles(data);
