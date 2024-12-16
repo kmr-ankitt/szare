@@ -30,6 +30,7 @@ export default function Directories() {
   const indexOfLastFile = currentPage * filesPerPage;
   const indexOfFirstFile = indexOfLastFile - filesPerPage;
   const filesPlusFolders = file.folders.concat(file.files);
+  const currentFilesPlusFolders = filesPlusFolders.slice(indexOfFirstFile, indexOfLastFile);
 
   const downloadFile = async (name: string) => {
     try {
@@ -64,7 +65,7 @@ export default function Directories() {
 
   return (
     <div className="h-full p-10 flex flex-col gap-2">
-      {filesPlusFolders.map((name, index) => (
+      {currentFilesPlusFolders.map((name, index) => (
         <div
           key={index}
           className="grid grid-cols-6 border-b-2 gap-2 border-b-lemon p-2 text-lemon"
@@ -109,10 +110,10 @@ export default function Directories() {
           )}
         </div>
       ))}
-      {file.files.length > filesPerPage && (
+      {filesPlusFolders.length > filesPerPage && (
         <div className="flex justify-center mt-4 text-darkblue font-bold">
           {Array.from(
-            { length: Math.ceil(file.files.length / filesPerPage) },
+            { length: Math.ceil(filesPlusFolders.length / filesPerPage) },
             (_, i) => (
               <button
                 key={i}
