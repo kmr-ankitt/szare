@@ -28,6 +28,7 @@ func DownloadFile(ctx *gin.Context) {
 	
 	if fileInfo, err := os.Stat(filePath); err == nil && fileInfo.IsDir() {
 		utils.ExpandDirectory(fileName)
+		ctx.Status(205)
 		return
 	}	
 	
