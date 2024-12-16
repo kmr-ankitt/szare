@@ -11,7 +11,7 @@ export default function Directories() {
   const filesPerPage = 12;
   const [ip, setIp] = useState<string>("");
 
-  useEffect(() => {
+  const fetchFiles = () =>{
     const hostname = document.location.hostname;
     setIp(hostname);
 
@@ -21,40 +21,43 @@ export default function Directories() {
         const { files, folders } = data;
         setFile({ files: files, folders: folders });
       });
+  }
+
+  useEffect(() => {
+    fetchFiles();
   }, []);
 
   const indexOfLastFile = currentPage * filesPerPage;
   const indexOfFirstFile = indexOfLastFile - filesPerPage;
   const filesPlusFolders = file.folders.concat(file.files);
 
-  const sendPostRequest = (name: string) => {
-    fetch(`http://${ip}:8000/api/download/?file=${name}`, {
-      method: "POST",
-    }).catch((error) => console.error(error));
-  };
+  const downloadFile = async (name: string) => {
+    try {
+      const res = await fetch(`http://${ip}:8000/api/download/?name=${name}`, {
+        method: "POST",
+      });
 
-  const downloadFile = (index: number) => {
-    const fileName = filesPlusFolders[index];
-    fetch(`http://${ip}:8000/api/download/?file=${fileName}`, {
-      method: "POST",
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to download file");
-        }
-        return res.blob();
-      })
-      .then((blob) => {
+      if (!res.ok) {
+        throw new Error("Failed to download file");
+      }
+
+      if (res.status != 205){
+
+        const blob = await res.blob();
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = fileName;
+        a.download = name;
         document.body.appendChild(a);
         a.click();
         a.remove();
         window.URL.revokeObjectURL(url);
-      })
-      .catch((error) => console.error(error));
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      fetchFiles();
+    }
   };
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
@@ -70,7 +73,7 @@ export default function Directories() {
 
           <div
             className="col-span-4 flex items-center gap-2 cursor-pointer"
-            onClick={() => sendPostRequest(name)}
+            onClick={() => downloadFile(name)}
           >
             {index > file.folders.length - 1 ? (
               <Image
@@ -93,7 +96,7 @@ export default function Directories() {
           </div>
           {index >= file.folders.length && (
             <div className="col-span-1">
-              <button onClick={() => downloadFile(indexOfFirstFile + index)}>
+              <button onClick={() => downloadFile(filesPlusFolders[index])}>
                 <Image
                   src="download.svg"
                   className="mt-[.2rem]"
