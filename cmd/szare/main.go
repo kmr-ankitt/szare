@@ -25,7 +25,7 @@ func main() {
 	router.Use(cors.Default())
 	router.GET("/", getHomepage)
 	router.POST("/api/download/:id", downloadFile)
-	router.Run("localhost:" + port)
+	router.Run(":8000")
 }
 
 func downloadFile(ctx *gin.Context) {
