@@ -21,16 +21,25 @@ export default function Directories() {
         const { files, folders } = data;
         setFile({ files: files, folders: folders });
       });
-  }
-
-  useEffect(() => {
-    fetchFiles();
-  }, []);
+    }
+    
+    useEffect(() => {
+      fetchFiles();
+    }, []);
 
   const indexOfLastFile = currentPage * filesPerPage;
   const indexOfFirstFile = indexOfLastFile - filesPerPage;
-  const filesPlusFolders = file.folders.concat(file.files);
+  const filesPlusFolders = file.folders.concat(file.files || [])
   const currentFilesPlusFolders = filesPlusFolders.slice(indexOfFirstFile, indexOfLastFile);
+  currentFilesPlusFolders.sort((a, b) => {
+    if (file.folders.includes(a) && !file.folders.includes(b)) {
+      return -1;
+    } else if (!file.folders.includes(a) && file.folders.includes(b)) {
+      return 1;
+    } else {
+      return a.localeCompare(b);
+    }
+  })
 
   const downloadFile = async (name: string) => {
     try {
