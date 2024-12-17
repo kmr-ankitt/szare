@@ -22,9 +22,7 @@ func DownloadFile(ctx *gin.Context) {
 		return
 	}
 	
-	// var fileName string = files[idInt]
 	filePath := filepath.Join(currWorkingDir, fileName)
-	
 	
 	if fileInfo, err := os.Stat(filePath); err == nil && fileInfo.IsDir() {
 		utils.ExpandDirectory(fileName)
@@ -37,7 +35,11 @@ func DownloadFile(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
 		return
 	}
-	ctx.FileAttachment(filePath , fileName)
+
+	// Stream the file
+	ctx.Header("Content-Disposition", "attachment; filename="+fileName)
+	ctx.Header("Content-Type", "application/octet-stream")
+	ctx.File(filePath)
 }
 
 func GetHomepage(ctx *gin.Context) {
