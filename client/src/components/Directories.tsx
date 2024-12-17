@@ -44,7 +44,7 @@ export default function Directories() {
   const downloadFile = async (name: string) => {
     try {
       const res = await fetch(`http://${ip}:8000/api/download/?name=${name}`, {
-        method: "POST",
+        method: "GET",
       });
 
       if (!res.ok) {
