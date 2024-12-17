@@ -13,7 +13,7 @@ func GetAllFilesAndFolder() ([]string, []string) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	var fileNames []string
+	var fileNames []string 
 	var folderNames []string = []string{".."}
 	for _, file := range items {
 		if !file.IsDir() {
@@ -22,7 +22,29 @@ func GetAllFilesAndFolder() ([]string, []string) {
 			folderNames = append(folderNames, file.Name())
 		}
 	}
-	return fileNames , folderNames
+
+	// Filter out hidden files
+	var filteredFileNames []string
+	for _, fileName := range fileNames {
+		if fileName[0] != '.' {
+			filteredFileNames = append(filteredFileNames, fileName)
+		}
+	}
+	fileNames = filteredFileNames
+
+	// Filter out hidden folders
+	filteredFolderNames := []string{}
+	for index, folderName := range folderNames {
+
+		if index == 0 {
+			filteredFolderNames = append(filteredFolderNames, folderName)
+		}
+		if folderName[0] != '.' {
+			filteredFolderNames = append(filteredFolderNames, folderName)
+		}
+	}
+
+	return filteredFileNames , filteredFolderNames
 }
 
 func ExpandDirectory(folderName string) ([]string, []string) {
