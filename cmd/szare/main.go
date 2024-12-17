@@ -15,6 +15,6 @@ func main() {
 	utils.ShowQRCode(clientPort)
 	router.Use(cors.Default())
 	router.GET("/", api.GetHomepage)
-	router.POST("/api/download/", api.DownloadFile)
+	router.GET("/api/download/", api.DownloadFile)
 	router.Run(":8000")
 }
