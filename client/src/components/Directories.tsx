@@ -102,7 +102,7 @@ export default function Directories() {
                 alt="folder-icon"
               />
             )}
-            {name}
+            <h1>{name.length > 13 ? `${name.substring(0, 13)}...` : name}</h1>
           </div>
           {!file.folders.includes(name) && (
             <div className="col-span-1">
