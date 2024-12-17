@@ -11,6 +11,10 @@ export default function Directories() {
   const filesPerPage = 9;
   const [ip, setIp] = useState<string>("");
 
+  const [downloadProgress, setDownloadProgress] = useState<{[key: string]: number}>({});
+  const [activeDownloads, setActiveDownloads] = useState<{[key: string]: boolean}>({});
+  const [downloadErrors, setDownloadErrors] = useState<{[key: string]: string}>({});
+
   const fetchFiles = () =>{
     const hostname = document.location.hostname;
     setIp(hostname);
@@ -43,30 +47,58 @@ export default function Directories() {
 
   const downloadFile = async (name: string) => {
     try {
-      const res = await fetch(`http://${ip}:8000/api/download/?name=${name}`, {
-        method: "GET",
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to download file");
+      setActiveDownloads(prev => ({...prev, [name]: true}));
+      setDownloadErrors(prev => ({...prev, [name]: ''}));
+      setDownloadProgress(prev => ({...prev, [name]: 0}));
+  
+      const response = await fetch(`http://${ip}:8000/api/download/?name=${name}`);
+  
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      if (response.status === 205) {
+        fetchFiles();
+        return;
       }
-
-      if (res.status != 205){
-
-        const blob = await res.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = name;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
+  
+      const reader = response.body?.getReader();
+      const contentLength = +(response.headers.get('Content-Length') ?? 0);
+  
+      if (!reader) throw new Error('Failed to initialize stream reader');
+  
+      let receivedLength = 0;
+      const chunks: Uint8Array[] = [];
+  
+      while(true) {
+        const {done, value} = await reader.read();
+        if (done) break;
+        
+        chunks.push(value);
+        receivedLength += value.length;
+        
+        setDownloadProgress(prev => ({
+          ...prev, 
+          [name]: (receivedLength / contentLength) * 100
+        }));
       }
+  
+      const blob = new Blob(chunks);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+  
     } catch (error) {
       console.error(error);
+      setDownloadErrors(prev => ({
+        ...prev, 
+        [name]: error instanceof Error ? error.message : 'Download failed'
+      }));
     } finally {
-      fetchFiles();
+      setActiveDownloads(prev => ({...prev, [name]: false}));
+      setDownloadProgress(prev => ({...prev, [name]: 0}));
     }
   };
 
@@ -106,15 +138,33 @@ export default function Directories() {
           </div>
           {!file.folders.includes(name) && (
             <div className="col-span-1">
-              <button onClick={() => downloadFile(filesPlusFolders[index])}>
-                <Image
-                  src="download.svg"
-                  className="mt-[.2rem]"
-                  height={25}
-                  width={25}
-                  alt="download-icon"
-                />
+              <button 
+                onClick={() => downloadFile(name)}
+                disabled={activeDownloads[name]}
+                className="relative flex items-center gap-2"
+              >
+                {activeDownloads[name] ? (
+                  <>
+                    <div className="w-6 h-6 border-2 border-lemon border-t-transparent rounded-full animate-spin" />
+                    <span className="text-xs">
+                      {Math.round(downloadProgress[name])}%
+                    </span>
+                  </>
+                ) : (
+                  <Image
+                    src="download.svg"
+                    className="mt-[.2rem]"
+                    height={25}
+                    width={25}
+                    alt="download-icon"
+                  />
+                )}
               </button>
+              {downloadErrors[name] && (
+                <div className="text-red-500 text-xs mt-1">
+                  {downloadErrors[name]}
+                </div>
+              )}
             </div>
           )}
         </div>

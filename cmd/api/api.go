@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 	"szare/cmd/utils"
+	"fmt"
+	"io"
 
 	"github.com/gin-gonic/gin"
 )
@@ -36,10 +38,41 @@ func DownloadFile(ctx *gin.Context) {
 		return
 	}
 
-	// Stream the file
+	// Get file info for size
+	fileInfo, err := os.Stat(filePath)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Cannot get file info"})
+		return
+	}
+
+	// Set additional headers
+	ctx.Header("Content-Length", fmt.Sprintf("%d", fileInfo.Size()))
 	ctx.Header("Content-Disposition", "attachment; filename="+fileName)
 	ctx.Header("Content-Type", "application/octet-stream")
-	ctx.File(filePath)
+	ctx.Header("Accept-Ranges", "bytes")
+
+	// Open file
+	file, err := os.Open(filePath)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Cannot open file"})
+		return
+	}
+	defer file.Close()
+
+	// Stream in chunks
+	buffer := make([]byte, 1024*1024) // 1MB chunks
+	for {
+		n, err := file.Read(buffer)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error reading file"})
+			return
+		}
+		ctx.Writer.Write(buffer[:n])
+		ctx.Writer.Flush()
+	}
 }
 
 func GetHomepage(ctx *gin.Context) {
