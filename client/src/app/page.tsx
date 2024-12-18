@@ -1,4 +1,5 @@
 import Container from "@/components/Container";
+import SendFile from "@/components/SendFile";
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
         </h1>
         <h2 className="text-xl sm:text-2xl text-zinc-200 text-center">file sharing</h2>
       </div>
+      <SendFile />
       <Container />
     </div>
   );
