@@ -8,7 +8,7 @@ export default function Directories() {
     folders: [],
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const filesPerPage = 9;
+  const filesPerPage = 10;
   const [ip, setIp] = useState<string>("");
 
   const [downloadProgress, setDownloadProgress] = useState<{[key: string]: number}>({});
@@ -111,7 +111,7 @@ export default function Directories() {
           key={index}
           className="grid grid-cols-6 border-b-2 gap-2 border-b-lemon p-2 text-lemon"
         >
-          <div className="col-span-1">{indexOfFirstFile + index + 1}.</div>
+          <div className="col-span-1 flex items-center">{indexOfFirstFile + index + 1}.</div>
 
           <div
             className="col-span-4 flex items-center gap-2 cursor-pointer"
@@ -134,10 +134,10 @@ export default function Directories() {
                 alt="folder-icon"
               />
             )}
-            <h1>{name.length > 13 ? `${name.substring(0, 13)}...` : name}</h1>
+            <h1 className="overflow-auto">{name}</h1>
           </div>
           {!file.folders.includes(name) && (
-            <div className="col-span-1">
+            <div className="col-span-1 pl-1 flex items-center">
               <button 
                 onClick={() => downloadFile(name)}
                 disabled={activeDownloads[name]}
@@ -169,22 +169,56 @@ export default function Directories() {
           )}
         </div>
       ))}
-       {filesPlusFolders.length > filesPerPage && (
+      {filesPlusFolders.length > filesPerPage && (
         <div className="flex justify-center mt-4 text-darkblue font-bold">
-          {Array.from(
-            { length: Math.ceil(filesPlusFolders.length / filesPerPage) },
-            (_, i) => (
-              <button
-                key={i}
-                onClick={() => paginate(i + 1)}
-                className={`px-4 py-2 mx-1 ${
-                  currentPage === i + 1 ? "bg-lemon" : "bg-gray-200"
-                }`}
-              >
-                {i + 1}
-              </button>
-            )
-          )}
+          {(() => {
+        const totalPages = Math.ceil(filesPlusFolders.length / filesPerPage);
+        const maxVisible = 4; // Show maximum 4 page numbers at once
+        let pages = [];
+
+        if (totalPages <= maxVisible) {
+          // Show all pages if total pages are less than maxVisible
+          pages = Array.from({length: totalPages}, (_, i) => i + 1);
+        } else {
+          // Always show first page
+          pages.push(1);
+          
+          if (currentPage > 2) {
+            pages.push('...');
+          }
+
+          // Show current page and one page after (if not last page)
+          if (currentPage !== 1 && currentPage !== totalPages) {
+            pages.push(currentPage);
+          }
+          if (currentPage < totalPages - 1) {
+            pages.push(currentPage + 1);
+          }
+
+          if (currentPage < totalPages - 1) {
+            pages.push('...');
+          }
+
+          // Always show last page
+          pages.push(totalPages);
+        }
+
+        return pages.map((page, index) => (
+          page === '...' ? (
+            <span key={`ellipsis-${index}`} className="px-4 py-2 mx-1 text-zinc-200">...</span>
+          ) : (
+            <button
+          key={index}
+          onClick={() => paginate(Number(page))}
+          className={`px-4 py-2 mx-1 ${
+            currentPage === page ? "bg-lemon" : "bg-gray-200"
+          }`}
+            >
+          {page}
+            </button>
+          )
+        ));
+          })()}
         </div>
       )}
     </div>
