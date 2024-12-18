@@ -57,7 +57,7 @@ setup_frontend() {
   npm install
   success "Frontend dependencies installed!"
   echo "Starting the frontend server..."
-  npm build & npm start &
+  npm run build & npm start &
   cd ../..
 }
 
