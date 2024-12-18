@@ -16,13 +16,7 @@ import (
  */
 func StartFrontend(){
 	
-	execPath,err := os.Executable()
-	if err != nil {
-		fmt.Println("Failed to get executable path", err)
-	}
-	
-	execDir := filepath.Dir(execPath)
-	clientDir := filepath.Join(execDir, "client")
+	clientDir := "/opt/szare/client"
 	
 	nextCmd := exec.Command("npm", "run", "start")
 	nextCmd.Dir = clientDir
