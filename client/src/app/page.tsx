@@ -1,4 +1,5 @@
 import Container from "@/components/Container";
+import Footer from "@/components/Footer";
 import SendFile from "@/components/SendFile";
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
       </div>
       <SendFile />
       <Container />
+      <Footer />
     </div>
   );
 }
