@@ -26,6 +26,22 @@ func SendFile(ctx *gin.Context) {
 	}
 
 	filePath := filepath.Join(currWorkingDir, header.Filename)
+
+	// Check if file already exists and rename if necessary
+	if _, err := os.Stat(filePath); err == nil {
+		ext := filepath.Ext(header.Filename)
+		base := header.Filename[:len(header.Filename)-len(ext)]
+		i := 1
+		for {
+			newFileName := fmt.Sprintf("%s(%d)%s", base, i, ext)
+			filePath = filepath.Join(currWorkingDir, newFileName)
+			if _, err := os.Stat(filePath); os.IsNotExist(err) {
+				break
+			}
+			i++
+		}
+	}
+
 	out, err := os.Create(filePath)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create file on server"})
