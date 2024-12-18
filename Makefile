@@ -3,7 +3,7 @@ FRONTEND_DIR := client
 BACKEND_MAIN := ./cmd/szare/main.go
 
 # Targets
-.PHONY: all frontend backend run clean
+.PHONY: frontend backend run clean 
 
 # Build both frontend and backend
 all: frontend backend

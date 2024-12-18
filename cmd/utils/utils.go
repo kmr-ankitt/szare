@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net"
 	"os"
-	// "os/exec"
-	// "time"
+	"os/exec"
+	"time"
 
 	"github.com/mdp/qrterminal/v3"
 )
@@ -13,20 +13,20 @@ import (
 /*
 * Testing
 */
-// func StartFrontend(){
-// 	nextCmd := exec.Command("npm", "run", "start")
-// 	nextCmd.Dir = "./client"
-// 	nextCmd.Stdout = os.Stdout
-// 	nextCmd.Stderr = os.Stderr
+func StartFrontend(){
+	nextCmd := exec.Command("npm", "run", "start")
+	nextCmd.Dir = "./client"
+	nextCmd.Stdout = os.Stdout
+	nextCmd.Stderr = os.Stderr
 	
-// 	err := nextCmd.Start()
-// 	if err != nil {
-// 		fmt.Println("Failed to start client", err)
-// 		return 
-// 	}
+	err := nextCmd.Start()
+	if err != nil {
+		fmt.Println("Failed to start client", err)
+		return 
+	}
 	
-// 	time.Sleep(5* time.Second)
-// }
+	time.Sleep(5* time.Second)
+}
 
 func GetAllFilesAndFolder() ([]string, []string) {
 	items, err := os.ReadDir("./")
