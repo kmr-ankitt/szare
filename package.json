@@ -1,0 +1,19 @@
+{
+  "name": "szare",
+  "version": "1.0.0",
+  "description": "File sharing application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmr-ankitt/szare.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kmr-ankitt/szare/issues"
+  },
+  "homepage": "https://github.com/kmr-ankitt/szare#readme"
+}
