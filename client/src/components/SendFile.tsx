@@ -1,8 +1,9 @@
 "use client";
 
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 export default function SendFile() {
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     const ip = document.location.hostname;
 
@@ -16,17 +17,19 @@ export default function SendFile() {
       console.log(data);
     } catch (err) {
       console.log(err);
-    } 
+    }
   };
 
   return (
-    <div className=" flex justify-center items-center w-full">
-      <form onSubmit={handleSubmit} className="flex-col flex justify-center ">
-        <input type="file" name="file" className="rounded-lg" />
-        <button type="submit" className="bg-lemon text-darkblue rounded-lg">
-          Send
-        </button>
-      </form>
+    <div className=" flex justify-center items-center py-10">
+      <div className="h-[100%] w-10/12 rounded-md ">
+        <form onSubmit={handleSubmit} className="flex-col flex justify-center gap-2 ">
+          <Input type="file" name="file" className="bg-zinc-200 text-zinc-900" />
+          <Button type="submit" className="bg-lemon text-darkblue uppercase ">
+            Send
+          </Button>
+        </form>
+      </div>
     </div>
   );
 }
