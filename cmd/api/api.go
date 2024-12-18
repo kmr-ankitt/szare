@@ -11,6 +11,37 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func SendFile(ctx *gin.Context) {
+	file, header, err := ctx.Request.FormFile("file")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get file from request"})
+		return
+	}
+	defer file.Close()
+
+	currWorkingDir, err := os.Getwd()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+		return
+	}
+
+	filePath := filepath.Join(currWorkingDir, header.Filename)
+	out, err := os.Create(filePath)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create file on server"})
+		return
+	}
+	defer out.Close()
+
+	_, err = io.Copy(out, file)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file on server"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "File sent successfully"})
+}
+
 func DownloadFile(ctx *gin.Context) {
 	currWorkingDir, err := os.Getwd()
 	if err != nil {
