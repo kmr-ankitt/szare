@@ -21,8 +21,8 @@ export default function SendFile() {
   };
 
   return (
-    <div className=" flex justify-center items-center py-10">
-      <div className="h-[100%] w-10/12 rounded-md ">
+    <div className=" flex justify-center items-center py-10 w-full">
+      <div className="h-[100%] w-10/12 rounded-md sm:w-8/12 md:w-8/12 lg:w-8/12 xl:w-8/12">
         <form onSubmit={handleSubmit} className="flex-col flex justify-center gap-2 ">
           <Input type="file" name="file" className="bg-zinc-200 text-zinc-900" />
           <Button type="submit" className="bg-lemon text-darkblue uppercase ">
