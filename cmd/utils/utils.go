@@ -5,6 +5,7 @@ import (
 	"net"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"time"
 
 	"github.com/mdp/qrterminal/v3"
@@ -12,19 +13,25 @@ import (
 
 /*
 * Testing
-*/
+ */
 func StartFrontend(){
+	
+	execPath,err := os.Executable()
+	if err != nil {
+		fmt.Println("Failed to get executable path", err)
+	}
+	
+	execDir := filepath.Dir(execPath)
+	clientDir := filepath.Join(execDir, "client")
+	
 	nextCmd := exec.Command("npm", "run", "start")
-	nextCmd.Dir = "./client"
+	nextCmd.Dir = clientDir
 	nextCmd.Stdout = os.Stdout
 	nextCmd.Stderr = os.Stderr
 	
-	err := nextCmd.Start()
-	if err != nil {
-		fmt.Println("Failed to start client", err)
-		return 
-	}
-	
+	if err := nextCmd.Start(); err != nil {
+		fmt.Printf("Failed to start frontend: %v", err)
+	}	
 	time.Sleep(5* time.Second)
 }
 
