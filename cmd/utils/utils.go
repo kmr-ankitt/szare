@@ -10,9 +10,6 @@ import (
 	"github.com/mdp/qrterminal/v3"
 )
 
-/*
-* Testing
- */
 func StartFrontend(){
 	homeDir, _ := os.UserHomeDir()
 	clientDir := homeDir + "/.local/szare/client/"

@@ -44,15 +44,6 @@ clone_repo() {
   fi
 }
 
-# Build the backend
-build_backend() {
-  echo "Building the backend..."
-  cd szare
-  go build -o "$APP_BINARY" "$BACKEND_MAIN"
-  success "Backend built successfully!"
-  cd -
-}
-
 # Set up and start the frontend
 setup_frontend() {
   echo "Setting up the frontend..."
