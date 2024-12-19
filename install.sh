@@ -28,7 +28,7 @@ error() {
 # Check if required tools are installed
 check_dependencies() {
   command -v git >/dev/null 2>&1 || error "Git is not installed. Please install Git."
-  command -v go >/dev/null 2>&1 || error "Go is not installed. Please install Go."
+  # command -v go >/dev/null 2>&1 || error "Go is not installed. Please install Go."
   command -v npm >/dev/null 2>&1 || error "npm is not installed. Please install Node.js and npm."
 }
 
@@ -36,8 +36,9 @@ check_dependencies() {
 clone_repo() {
   if [ -d STORED_DIR ]; then
     echo "Directory 'szare' already exists. Pulling latest changes..."
-    cd szare && git pull && cd ..
+    cd $STORED_DIR && git pull && cd -
   else
+    mkdir -p "$HOME/.local"
     cd "$HOME/.local"
     git clone "$REPO_URL"
   fi
@@ -49,7 +50,7 @@ build_backend() {
   cd szare
   go build -o "$APP_BINARY" "$BACKEND_MAIN"
   success "Backend built successfully!"
-  cd 
+  cd -
 }
 
 # Set up and start the frontend
@@ -61,7 +62,7 @@ setup_frontend() {
   echo "Building the frontend..."
   npm run build
   echo "Frontend built successfully!"
-  cd 
+  cd -
 }
 
 # Start the backend
@@ -69,7 +70,7 @@ start_backend() {
   echo "Starting the backend..."
   cd szare
   ./"$APP_BINARY" &
-  cd 
+  cd -
 }
 
 check_if_frontend_is_already_build() {
@@ -84,11 +85,11 @@ run_frontend() {
   echo "Starting the frontend..."
   cd $FRONTEND_DIR
   npm start
-  cd 
+  cd -
 }
 
 place_backend_binary() {
-  echo "Placing the backend binary in /usr/local/bin..."
+  echo "Placing the backend binary..."
   sudo cp "$HOME/.local/szare/$APP_BINARY" /usr/bin
   success "Backend installed successfully!"
 }
