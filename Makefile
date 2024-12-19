@@ -6,7 +6,7 @@ BACKEND_MAIN := ./cmd/szare/main.go
 .PHONY: frontend backend run clean 
 
 # Build both frontend and backend
-all: frontend backend
+build: frontend backend
 
 # Build the frontend
 frontend:
