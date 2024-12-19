@@ -99,6 +99,7 @@ main() {
   clone_repo
   # build_backend
   check_if_frontend_is_already_build
+  place_backend_binary
   success "Szare installed successfully!"
 }
 
