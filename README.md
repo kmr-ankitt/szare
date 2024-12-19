@@ -1,11 +1,11 @@
 # Szare
 
-Szare is a fast and secure local network file-sharing application that requires zero configuration.
+Szare is a fast and offline file-sharing application that requires zero configuration.
 
 ## Features
 
+- 🌐 Completely offline 
 - 🚀 High-speed local network transfers
-- 🔒 No internet dependency
 - 📱 Modern web interface
 - 📦 Support for large files (>1GB)
 - 📂 Directory navigation
@@ -36,7 +36,7 @@ curl -sSL https://raw.githubusercontent.com/kmr-ankitt/szare/main/install.sh | b
     - If you want to share from your other devices then you can upload files from the web interface and It will be downloaded to the directory you started the application in.
 
 3. **Receiving Files**:
-   - Other devices on the ** same local network ** can access the shared files by scanning the QR code presented at the terminal or navigating to `http://<your-local-ip>:8080` in their web browser.
+   - Other devices on the **same local network** can access the shared files by scanning the QR code presented at the terminal or navigating to `http://<your-local-ip>:8080` in their web browser.
    - They can browse the available files and download them as needed.
 
 4. **Real-time Progress Tracking**:
