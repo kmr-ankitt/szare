@@ -89,7 +89,7 @@ run_frontend() {
 
 place_backend_binary() {
   echo "Placing the backend binary in /usr/local/bin..."
-  sudo cp "$HOME/.local/szare/$APP_BINARY" /usr/local/bin
+  sudo cp "$HOME/.local/szare/$APP_BINARY" /usr/bin
   success "Backend installed successfully!"
 }
 
