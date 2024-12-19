@@ -14,27 +14,7 @@ import (
 * Testing
  */
 func StartFrontend(){
-	clientDir := "/lib/node_modules/szare/client"
-	
-	installCmd := exec.Command("npm", "install")
-	installCmd.Dir = clientDir
-	installCmd.Stdout = os.Stdout
-	installCmd.Stderr = os.Stderr
-
-	if err := installCmd.Run(); err != nil {
-		fmt.Println("Failed to install dependencies", err)
-		return
-	}
-
-	buildCmd := exec.Command("npm", "run", "build")
-	buildCmd.Dir = clientDir
-	buildCmd.Stdout = os.Stdout
-	buildCmd.Stderr = os.Stderr
-
-	if err := buildCmd.Run(); err != nil {
-			fmt.Println("Failed to build client", err)
-			return
-	}
+	clientDir := "~/.local/szare/client/"
 	
 	nextCmd := exec.Command("npm", "run", "start")
 	nextCmd.Dir = clientDir

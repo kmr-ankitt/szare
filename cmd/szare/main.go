@@ -13,7 +13,7 @@ func main() {
 	clientPort := "8080"
 	gin.SetMode(gin.ReleaseMode)
 
-	// utils.StartFrontend()
+	utils.StartFrontend()
 	utils.ShowQRCode(clientPort)
 	router.Use(cors.Default())
 	router.GET("/", api.GetHomepage)

@@ -58,8 +58,9 @@ setup_frontend() {
   cd $FRONTEND_DIR
   npm install
   success "Frontend dependencies installed!"
-  echo "Starting the frontend server..."
+  echo "Building the frontend..."
   npm run build
+  echo "Frontend built successfully!"
   cd 
 }
 
@@ -86,16 +87,19 @@ run_frontend() {
   cd 
 }
 
+place_backend_binary() {
+  echo "Placing the backend binary in /usr/local/bin..."
+  sudo cp "$HOME/.local/szare/$APP_BINARY" /usr/local/bin
+  success "Backend installed successfully!"
+}
+
 # Main installation process
 main() {
   check_dependencies
   clone_repo
   # build_backend
   check_if_frontend_is_already_build
-  run_frontend
-  start_backend
-  success "Szare is up and running!"
-  # echo "Access the frontend at http://localhost:3000"
+  success "Szare installed successfully!"
 }
 
 main
