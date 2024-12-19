@@ -4,7 +4,8 @@ set -e
 
 # Variables
 REPO_URL="https://github.com/kmr-ankitt/szare"
-FRONTEND_DIR="client"
+STORED_DIR="$HOME/.local/szare"
+FRONTEND_DIR="$HOME/.local/szare/client"
 BACKEND_MAIN="./cmd/szare/main.go"
 APP_BINARY="szare"
 
@@ -33,10 +34,11 @@ check_dependencies() {
 
 # Clone the repository
 clone_repo() {
-  if [ -d "szare" ]; then
+  if [ -d STORED_DIR ]; then
     echo "Directory 'szare' already exists. Pulling latest changes..."
     cd szare && git pull && cd ..
   else
+    cd "$HOME/.local"
     git clone "$REPO_URL"
   fi
 }
@@ -47,18 +49,18 @@ build_backend() {
   cd szare
   go build -o "$APP_BINARY" "$BACKEND_MAIN"
   success "Backend built successfully!"
-  cd ..
+  cd 
 }
 
 # Set up and start the frontend
 setup_frontend() {
   echo "Setting up the frontend..."
-  cd "szare/$FRONTEND_DIR"
+  cd $FRONTEND_DIR
   npm install
   success "Frontend dependencies installed!"
   echo "Starting the frontend server..."
-  npm run build & npm start &
-  cd ../..
+  npm run build
+  cd 
 }
 
 # Start the backend
@@ -66,15 +68,31 @@ start_backend() {
   echo "Starting the backend..."
   cd szare
   ./"$APP_BINARY" &
-  cd ..
+  cd 
+}
+
+check_if_frontend_is_already_build() {
+  if [ -d "$FRONTEND_DIR/.next" ]; then
+    echo "Frontend is already built."
+  else
+    setup_frontend
+  fi 
+}
+
+run_frontend() {
+  echo "Starting the frontend..."
+  cd $FRONTEND_DIR
+  npm start
+  cd 
 }
 
 # Main installation process
 main() {
   check_dependencies
   clone_repo
-  build_backend
-  setup_frontend
+  # build_backend
+  check_if_frontend_is_already_build
+  run_frontend
   start_backend
   success "Szare is up and running!"
   # echo "Access the frontend at http://localhost:3000"
