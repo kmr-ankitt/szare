@@ -34,7 +34,7 @@ check_dependencies() {
 
 # Clone the repository
 clone_repo() {
-  if [ -d STORED_DIR ]; then
+  if [ -d "$STORED_DIR" ]; then
     echo "Directory 'szare' already exists. Pulling latest changes..."
     cd $STORED_DIR && git pull && cd -
   else
