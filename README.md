@@ -2,7 +2,9 @@
 
 Szare is a fast and offline file-sharing application that requires zero configuration.
 
-_Currently only Supports Linux systems 🐧_
+
+![image](https://github.com/user-attachments/assets/4fafcacf-ebe7-42d4-815f-65a2622fb326)
+
 
 ## Features
 
@@ -15,7 +17,9 @@ _Currently only Supports Linux systems 🐧_
 
 ## Quick Installation
 
-Ensure that npm is installed on your system.
+- _Currently only Supports Linux systems 🐧_
+
+- _Ensure that nodejs is installed on your system._
 
 To install Szare, run the following command:
 
