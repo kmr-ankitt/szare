@@ -8,7 +8,7 @@ Szare is a fast and offline file-sharing application that requires zero configur
 
 ## Features
 
-- 🌐 Completely offline 
+- 🌐 Self hosted
 - 🚀 High-speed local network transfers
 - 📱 Modern web interface
 - 📦 Support for large files (>1GB)
