@@ -2,6 +2,8 @@
 
 Szare is a fast and offline file-sharing application that requires zero configuration.
 
+_Currently only Supports Linux systems 🐧_
+
 ## Features
 
 - 🌐 Completely offline 
