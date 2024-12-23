@@ -1,4 +1,5 @@
 "use client";
+import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -14,6 +15,7 @@ export default function Directories() {
   const [downloadProgress, setDownloadProgress] = useState<{[key: string]: number}>({});
   const [activeDownloads, setActiveDownloads] = useState<{[key: string]: boolean}>({});
   const [downloadErrors, setDownloadErrors] = useState<{[key: string]: string}>({});
+  const {toast} = useToast();
 
   const fetchFiles = () =>{
     const hostname = document.location.hostname;
@@ -79,7 +81,7 @@ export default function Directories() {
           [name]: (receivedLength / contentLength) * 100
         }));
       }
-  
+      
       const blob = new Blob(chunks);
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -89,6 +91,7 @@ export default function Directories() {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
+      toast({title: "Download complete"});
   
     } catch (error) {
       console.error(error);
@@ -96,6 +99,7 @@ export default function Directories() {
         ...prev, 
         [name]: error instanceof Error ? error.message : 'Download failed'
       }));
+      toast({title: "Download failed", variant: "destructive"});
     } finally {
       setActiveDownloads(prev => ({...prev, [name]: false}));
       setDownloadProgress(prev => ({...prev, [name]: 0}));
