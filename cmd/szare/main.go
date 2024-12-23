@@ -9,9 +9,9 @@ import (
 )
 
 func main() {
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	clientPort := "8080"
-	gin.SetMode(gin.ReleaseMode)
 
 	utils.StartFrontend()
 	utils.ShowQRCode(clientPort)
