@@ -13,6 +13,9 @@ import (
 func StartFrontend(){
 	homeDir, _ := os.UserHomeDir()
 	clientDir := homeDir + "/.local/szare/client/"
+	if _, err := os.Stat(clientDir); os.IsNotExist(err) {
+		clientDir = "./client"
+	}
 	
 	nextCmd := exec.Command("npm", "run", "start")
 	nextCmd.Dir = clientDir
