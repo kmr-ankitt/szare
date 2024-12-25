@@ -42,7 +42,7 @@ curl -sSL https://raw.githubusercontent.com/kmr-ankitt/szare/main/install.sh | b
     - If you want to share from your other devices then you can upload files from the web interface and It will be downloaded to the directory you started the application in.
 
 3. **Receiving Files**:
-   - Other devices on the **same local network** can access the shared files by scanning the QR code presented at the terminal or navigating to `http://<your-local-ip>:8080` in their web browser.
+   - Other devices on the **same local network** can access the shared files by scanning the QR code presented at the terminal or navigating to `http://<your-local-ip>:3002` in their web browser.
    - They can browse the available files and download them as needed.
 
 4. **Real-time Progress Tracking**:

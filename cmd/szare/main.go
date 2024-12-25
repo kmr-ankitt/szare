@@ -11,7 +11,7 @@ import (
 func main() {
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
-	clientPort := "8080"
+	clientPort := "3002"
 
 	utils.StartFrontend()
 	utils.ShowQRCode(clientPort)
@@ -19,5 +19,5 @@ func main() {
 	router.GET("/", api.GetHomepage)
 	router.GET("/api/download/", api.DownloadFile)
 	router.POST("/api/send", api.SendFile)
-	router.Run(":8000")
+	router.Run(":3003")
 }
