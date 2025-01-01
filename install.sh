@@ -64,14 +64,6 @@ start_backend() {
   cd -
 }
 
-check_if_frontend_is_already_build() {
-  if [ -d "$FRONTEND_DIR/.next" ]; then
-    echo "Frontend is already built."
-  else
-    setup_frontend
-  fi 
-}
-
 run_frontend() {
   echo "Starting the frontend..."
   cd $FRONTEND_DIR
@@ -90,7 +82,7 @@ main() {
   check_dependencies
   clone_repo
   # build_backend
-  check_if_frontend_is_already_build
+  setup_frontend
   place_backend_binary
   success "Szare installed successfully!"
 }
