@@ -21,7 +21,7 @@ export default function Directories() {
     const hostname = document.location.hostname;
     setIp(hostname);
 
-    fetch(`http://${hostname}:8000`)
+    fetch(`http://${hostname}:3003`)
       .then((res) => res.json())
       .then((data) => {
         const { files, folders } = data;
@@ -53,7 +53,7 @@ export default function Directories() {
       setDownloadErrors(prev => ({...prev, [name]: ''}));
       setDownloadProgress(prev => ({...prev, [name]: 0}));
   
-      const response = await fetch(`http://${ip}:8000/api/download/?name=${name}`);
+      const response = await fetch(`http://${ip}:3003/api/download/?name=${name}`);
   
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       if (response.status === 205) {

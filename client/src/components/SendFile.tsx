@@ -13,7 +13,7 @@ export default function SendFile() {
     const ip = document.location.hostname;
     const formData = new FormData(e.currentTarget);
     try {
-      await axios.post(`http://${ip}:8000/api/send`, formData);
+      await axios.post(`http://${ip}:3003/api/send`, formData);
       toast({ title: "File sent successfully" });
     } catch (err) {
       console.log(err);
