@@ -2,9 +2,9 @@
 
 set -e
 
-REPO_DIR="$HOME/.local/szare"
+REPO_DIR="$HOME/.local/share/szare"
 APP_BINARY="szare"
-BINARY_PATH="/usr/bin/$APP_BINARY"
+BINARY_PATH="$HOME/.local/bin/$APP_BINARY"
 
 # Colors for pretty output
 GREEN="\033[0;32m"
@@ -25,7 +25,7 @@ error() {
 
 remove_binary() {
   echo "Removing the binary..."
-  sudo rm $BINARY_PATH
+  rm $BINARY_PATH
   success "Binary removed successfully!"
 }
 

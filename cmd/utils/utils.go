@@ -12,7 +12,7 @@ import (
 
 func StartFrontend(){
 	homeDir, _ := os.UserHomeDir()
-	clientDir := homeDir + "/.local/szare/client/"
+	clientDir := homeDir + "/.local/share/szare/client/"
 	if _, err := os.Stat(clientDir); os.IsNotExist(err) {
 		clientDir = "./client"
 	}
