@@ -4,8 +4,8 @@ set -e
 
 # Variables
 REPO_URL="https://github.com/kmr-ankitt/szare"
-STORED_DIR="$HOME/.local/szare"
-FRONTEND_DIR="$HOME/.local/szare/client"
+STORED_DIR="$HOME/.local/share/szare"
+FRONTEND_DIR="$HOME/.local/share/szare/client"
 BACKEND_MAIN="./cmd/szare/main.go"
 APP_BINARY="szare"
 
@@ -38,8 +38,8 @@ clone_repo() {
     echo "Directory 'szare' already exists. Pulling latest changes..."
     cd $STORED_DIR && git pull && cd -
   else
-    mkdir -p "$HOME/.local"
-    cd "$HOME/.local"
+    mkdir -p "$HOME/.local/share"
+    cd "$HOME/.local/share"
     git clone "$REPO_URL"
   fi
 }
@@ -73,7 +73,7 @@ run_frontend() {
 
 place_backend_binary() {
   echo "Placing the backend binary..."
-  sudo cp "$HOME/.local/szare/$APP_BINARY" /usr/bin
+  cp "$HOME/.local/share/szare/$APP_BINARY" "$HOME/.local/bin/"
   success "Backend installed successfully!"
 }
 
@@ -88,4 +88,3 @@ main() {
 }
 
 main
-
